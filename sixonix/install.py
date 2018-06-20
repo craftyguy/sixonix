@@ -58,6 +58,8 @@ def install_benchmarks_for_module(module_name, quiet = False):
             reporthook = None if quiet else \
                          get_report_hook(os.path.basename(package_url))
             urlretrieve(package_url, package_fname, reporthook)
+            print("retrieved binaries for {}...".format(package_url))
+            os.sync()
         if package_fname.endswith(".zip"):
             try:
                 zipf = zipfile.ZipFile(package_fname)
@@ -71,11 +73,13 @@ def install_benchmarks_for_module(module_name, quiet = False):
                 assert False, ("ERROR: The benchmark package could not be "
                                "fully extracted.")
         elif package_fname.endswith(".run"):
+            print("executing {}".format(package_fname))
             proc = subprocess.Popen(["/bin/sh", package_fname],
                                     stdout=subprocess.PIPE, 
                                     stderr=subprocess.PIPE,
                                     cwd = conf.benchmark_path)
             (out, err) = proc.communicate()
+            os.sync()
             print("stdout: " + out)
             print("stderr: " + err)
         else:
