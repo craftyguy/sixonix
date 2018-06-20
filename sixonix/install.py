@@ -78,6 +78,8 @@ def install_benchmarks_for_module(module_name, quiet = False):
                 os.utime(extract_ok)
         elif package_fname.endswith(".run"):
             proc = subprocess.Popen(["bash", package_fname],
+                                    stdout=subprocess.PIPE, 
+                                    stderr=subprocess.PIPE,
                                     cwd = conf.benchmark_path)
             proc.communicate()
             # 'touch' the extract_ok file to create it
