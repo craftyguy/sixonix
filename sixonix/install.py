@@ -35,10 +35,9 @@ def get_report_hook(desc):
 def install_benchmarks_for_module(module_name, quiet = False):
     """Installs the bechmark binaries for the given module"""
     conf = config.get_config_for_module(module_name)
-    extract_ok = os.path.join(conf.benchmark_path, 'extract_ok')
 
     # Check to see if it's already installed
-    installed = True if os.path.exists(extract_ok) else False
+    installed = True
     for executable in conf.executables:
         executable_path = os.path.join(conf.benchmark_path, executable)
         if not os.path.exists(executable_path):
@@ -69,22 +68,16 @@ def install_benchmarks_for_module(module_name, quiet = False):
             try:
                 zipf.extractall(path=conf.benchmark_path)
             except Exception as e:
-                if os.path.exists(extract_ok):
-                    os.path.remove(extract_ok)
                 assert False, ("ERROR: The benchmark package could not be "
                                "fully extracted.")
-            # 'touch' the extract_ok file to create it
-            with open(extract_ok, 'a'):
-                os.utime(extract_ok)
         elif package_fname.endswith(".run"):
             proc = subprocess.Popen(["bash", package_fname],
                                     stdout=subprocess.PIPE, 
                                     stderr=subprocess.PIPE,
                                     cwd = conf.benchmark_path)
-            proc.communicate()
-            # 'touch' the extract_ok file to create it
-            with open(extract_ok, 'a'):
-                os.utime(extract_ok)
+            (out, err) = proc.communicate()
+            print("stdout: " + out)
+            print("stderr: " + err)
         else:
             assert False, "Unknown package file extension"
 
