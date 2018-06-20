@@ -80,8 +80,8 @@ def install_benchmarks_for_module(module_name, quiet = False):
                                     cwd = conf.benchmark_path)
             (out, err) = proc.communicate()
             os.sync()
-            print("stdout: " + out)
-            print("stderr: " + err)
+            print("stdout: " + str(out))
+            print("stderr: " + str(err))
         else:
             assert False, "Unknown package file extension"
 
