@@ -47,7 +47,7 @@ def run(test, args, env = os.environ, install = True):
     suite = test.split(".")[0]
     test = test.split(".")[1]
     if install:
-        SUITES[suite].install(quiet = True)
+        SUITES[suite].install()
 
     env = env.copy()
     env["vblank_mode"] = "0"
